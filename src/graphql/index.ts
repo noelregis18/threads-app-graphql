@@ -3,6 +3,7 @@ index {User} from "./user";
 async function createApolloGraphqlServer(){
     const gqlServer = new ApolloServer({
         typeDefs:`
+        ${User.typeDefs}
         type Query {
        ${User.queries}
        hello:String
@@ -17,6 +18,10 @@ async function createApolloGraphqlServer(){
               //  hello:()=>`Hey there , I am a graphql server`,
               //  say:(_,{name}:{name:string})=>`Hey ${name},How are you?`
               ...User.resolvers.queries,
+              getContext:(_: any,parameters:any,context)=>{
+                console.log("context",context);
+                return "okay";
+              },
             },
             Mutation:{
                 .../User.resolvers.mutations,

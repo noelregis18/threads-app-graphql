@@ -18,6 +18,9 @@ class UserService{
         const hashedPassword=createHmac("sha256",salt).update(password).digest("hex");
         return hashedPassword;
     }
+    public static getUserIdbyString(id:string){
+        return prismaClient.user.findUnique({where:{id}});
+    }
 public static createUser(payload:CreateUserPayload){
     const {firstName,lastName,email,password}=payload
     const salt=randomBytes(32).toString("hex");
@@ -48,5 +51,8 @@ public static async getUserToken(payload:GetUserTokenPayLoad){
     const token=JWT.sign({id:user.id,email:user.email},JWT_SECRET)
     return token;
 } 
+public static decodeJWTToken(token:string){
+    return JWT.verify(token,JWT_SECRET);
+}
 }
 export default UserService;
